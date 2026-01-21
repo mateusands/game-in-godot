@@ -1,21 +1,24 @@
-# Godot cache / editor
+# 
 .import/
 .godot/
 
-# Exportações / builds
+# 
 .export/
 *.pck
 *.exe
 *.zip
 
-# Logs e temporários
+# 
 *.log
 *.tmp
 
-# IDEs / editores
+# 
 .vscode/
 .idea/
 
-# Sistema
+# 
 .DS_Store
 Thumbs.db
+
+#
+*.png
