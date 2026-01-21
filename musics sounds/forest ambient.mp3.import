@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bn2065mu23u6"
+path="res://.godot/imported/forest ambient.mp3-f956a1fb3f1ff8a34452894328e6270e.mp3str"
+
+[deps]
+
+source_file="res://musics sounds/forest ambient.mp3"
+dest_files=["res://.godot/imported/forest ambient.mp3-f956a1fb3f1ff8a34452894328e6270e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

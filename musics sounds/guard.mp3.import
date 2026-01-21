@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b3g1g2coasgui"
+path="res://.godot/imported/guard.mp3-60b8393d56e9c15ac74c53a63275114a.mp3str"
+
+[deps]
+
+source_file="res://musics sounds/guard.mp3"
+dest_files=["res://.godot/imported/guard.mp3-60b8393d56e9c15ac74c53a63275114a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

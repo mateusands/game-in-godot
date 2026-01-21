@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2whwtjud6xbm"
+path="res://.godot/imported/slash.mp3-eb259814c199a61e24f0d3fa4895f755.mp3str"
+
+[deps]
+
+source_file="res://musics sounds/slash.mp3"
+dest_files=["res://.godot/imported/slash.mp3-eb259814c199a61e24f0d3fa4895f755.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

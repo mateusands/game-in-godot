@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://c7i1psoedy5yt"]
+[gd_scene load_steps=94 format=3 uid="uid://c7i1psoedy5yt"]
 
 [ext_resource type="Script" uid="uid://dcdgaf7e2wq0b" path="res://player/player.gd" id="1_g1dw6"]
 [ext_resource type="Texture2D" uid="uid://b6k3hcvjf7kfq" path="res://player/IDLE.png" id="1_rkbax"]
@@ -11,6 +11,13 @@
 [ext_resource type="Texture2D" uid="uid://cynolel2gxhr5" path="res://player/DASH ATTACK.png" id="6_8t03j"]
 [ext_resource type="Texture2D" uid="uid://cnxqrldc7xq1b" path="res://player/DEFEND.png" id="7_2ieo8"]
 [ext_resource type="Texture2D" uid="uid://bo3cve4euh7yy" path="res://player/STRONG ATTACK.png" id="8_rgyib"]
+[ext_resource type="AudioStream" uid="uid://b7qekbg8jcyd1" path="res://musics sounds/sword-slash2.mp3" id="12_ebec5"]
+[ext_resource type="AudioStream" uid="uid://d2whwtjud6xbm" path="res://musics sounds/slash.mp3" id="13_yllr7"]
+[ext_resource type="AudioStream" uid="uid://ba0apwrsbm8fh" path="res://musics sounds/running-in-grass.mp3" id="14_kb6p2"]
+[ext_resource type="AudioStream" uid="uid://emiu7xka0hdc" path="res://musics sounds/jumplanding.mp3" id="15_wodsf"]
+[ext_resource type="AudioStream" uid="uid://cb42h0fb4mr6d" path="res://musics sounds/simple-whoosh.mp3" id="16_32hag"]
+[ext_resource type="AudioStream" uid="uid://y1kp46e4no4h" path="res://musics sounds/dasssss.mp3" id="17_tqiix"]
+[ext_resource type="AudioStream" uid="uid://b3g1g2coasgui" path="res://musics sounds/guard.mp3" id="18_e7oew"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r7pn3"]
 atlas = ExtResource("2_qjkh3")
@@ -578,7 +585,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"strong_attack",
-"speed": 10.0
+"speed": 17.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uw77l"]
@@ -592,9 +599,39 @@ script = ExtResource("1_g1dw6")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-1, -33)
 sprite_frames = SubResource("SpriteFrames_7pqkx")
-animation = &"guard"
+animation = &"strong_attack"
 autoplay = "idle"
+frame = 10
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -16)
 shape = SubResource("CapsuleShape2D_uw77l")
+
+[node name="Strong_Attack_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_ebec5")
+volume_db = -10.0
+
+[node name="Attack_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("13_yllr7")
+volume_db = -7.0
+
+[node name="Run_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("14_kb6p2")
+parameters/looping = true
+
+[node name="jump_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("15_wodsf")
+volume_db = -8.0
+
+[node name="dash_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_32hag")
+volume_db = -13.0
+
+[node name="dash_atk_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("17_tqiix")
+volume_db = -8.0
+
+[node name="guard_sfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_e7oew")
+volume_db = -11.0
