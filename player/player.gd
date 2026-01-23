@@ -8,6 +8,12 @@ extends CharacterBody2D
 @onready var dash_sfx: AudioStreamPlayer2D = $dash_sfx
 @onready var dash_atk_sfx: AudioStreamPlayer2D = $dash_atk_sfx
 @onready var guard_sfx: AudioStreamPlayer2D = $guard_sfx
+@onready var death_sfx: AudioStreamPlayer2D = $death_sfx
+@onready var hurt_sfx: AudioStreamPlayer2D = $hurt_sfx
+@onready var throw_sfx: AudioStreamPlayer2D = $throw_sfx
+
+@onready var bullet_position: Marker2D = $bullet_position
+@onready var shoot_cooldown: Timer = $shoot_cooldown
 
 signal health_changed
 @export var health : int = 100 :
@@ -38,7 +44,11 @@ func die():
 	
 	self.modulate.a = 1.0
 	
-	# $DeathSound.play() 
+	# Parar sons de movimento
+	run_sfx.stop()
+	is_running_sfx = false
+	
+	death_sfx.play() 
 	animated_sprite_2d.play("death")
 
 const GRAVITY = 1000
@@ -56,7 +66,11 @@ const DASH_DURATION = 0.2
 const DASH_COOLDOWN = 1.0        # Tempo para o Dash Normal
 const DASH_ATTACK_COOLDOWN = 3.0 # Tempo maior para o Dash Attack
 
-enum State { Idle, Run, Jump, Attack, Dash, Guard, Dead, Hurt }
+# --- Projeteis
+
+const BULLET_SCENE = preload("uid://bigky5dol3uju")
+
+enum State { Idle, Run, Jump, Attack, Dash, Guard, Dead, Hurt, Throw }
 var current_state = State.Idle
 
 # Variável para controlar o tempo do dash
@@ -119,7 +133,7 @@ func player_gravity(delta):
 		velocity.y += GRAVITY * delta
 
 func player_move(_delta):
-	if current_state == State.Hurt:
+	if current_state == State.Hurt or current_state == State.Throw:
 		return
 		
 	if is_dashing:
@@ -135,6 +149,14 @@ func player_move(_delta):
 
 	var direction = Input.get_axis("move_left", "move_right")
 	
+	if Input.is_action_just_pressed("move_left"):
+		if sign(bullet_position.position.x) == 1:
+			bullet_position.position.x *= -1
+			
+	if Input.is_action_just_pressed("move_right"):
+		if sign(bullet_position.position.x) == -1:
+			bullet_position.position.x *= -1
+	
 	var current_move_speed = SPEED
 	
 	if current_state == State.Attack:
@@ -147,6 +169,9 @@ func player_move(_delta):
 
 func player_jump(delta):
 	if current_state == State.Hurt:
+		return
+	
+	if current_state == State.Attack or current_state == State.Throw:
 		return
 
 	if is_dashing or is_guarding:
@@ -174,7 +199,7 @@ func player_dash(delta):
 		self.modulate.a = 1.0 
 
 func player_attack():
-	if current_state == State.Hurt:
+	if current_state == State.Hurt or current_state == State.Throw:
 		return
 
 	if is_dashing and !dash_attack:
@@ -183,6 +208,14 @@ func player_attack():
 	if is_guarding:
 		return
 
+	# THROW (Jogar Shuriken)
+	if Input.is_action_just_pressed("throw") and current_state != State.Attack:
+		
+		if is_on_floor() and shoot_cooldown.is_stopped():
+			current_state = State.Throw
+			velocity.x = 0
+			shoot_bullet()
+			
 	# COMBO NORMAL
 	if Input.is_action_just_pressed("attack_1"):
 		if current_state != State.Attack:
@@ -219,7 +252,6 @@ func player_attack():
 	# DASH COMUM
 	if Input.is_action_just_pressed("dash") and current_state != State.Attack:
 		if dash_cooldown_timer <= 0:
-			# Usa o tempo NORMAL para o dash
 			dash_cooldown_timer = DASH_COOLDOWN 
 			
 			is_dashing = true
@@ -238,6 +270,10 @@ func player_state():
 		return
 	
 	if current_state == State.Dead or current_state == State.Hurt:
+		return
+		
+	# Se estiver jogando shuriken, não muda estado
+	if current_state == State.Throw:
 		return
 
 	if Input.is_action_pressed("guard") and !dash_attack and current_state != State.Attack:
@@ -279,10 +315,17 @@ func player_animations():
 			is_running_sfx = true
 			last_animation = "run"
 	
+	elif current_state == State.Throw:
+		if last_animation != "throw":
+			animated_sprite_2d.play("throw")
+			last_animation = "throw"
+			throw_sfx.play()
+	
 	elif current_state == State.Hurt:
 		if last_animation != "hurt":
 			animated_sprite_2d.play("hurt")
 			last_animation = "hurt"
+			hurt_sfx.play()
 		
 	elif current_state == State.Jump:
 		animated_sprite_2d.play("jump")
@@ -333,6 +376,11 @@ func _on_animation_finished():
 		current_state = State.Idle
 		return
 		
+	# --- FIM DO THROW ---
+	if current_state == State.Throw:
+		current_state = State.Idle
+		return
+		
 	if current_state == State.Dash:
 		is_dashing = false
 		current_state = State.Idle
@@ -353,7 +401,6 @@ func _on_animation_finished():
 		dash_atk_sfx_played = false
 		current_state = State.Idle
 		
-		# Reseta opacidade no fim do Dash Attack
 		self.modulate.a = 1.0
 		return
 
@@ -366,3 +413,15 @@ func _on_animation_finished():
 	attack_stage = 0
 	attack_sfx_played = false
 	current_state = State.Idle
+
+func shoot_bullet():
+	var bullet_instance = BULLET_SCENE.instantiate()
+	
+	if sign(bullet_position.position.x) == 1:
+		bullet_instance.set_direction(1)
+	else:
+		bullet_instance.set_direction(-1)
+		
+	get_parent().add_child(bullet_instance)
+	bullet_instance.global_position = bullet_position.global_position
+	shoot_cooldown.start()

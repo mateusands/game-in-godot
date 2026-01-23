@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dphj7tm4nib0d"
+path="res://.godot/imported/metal-whoosh-hit-4-201906.mp3-69a72f6454df5ab1eec76fef980138a5.mp3str"
+
+[deps]
+
+source_file="res://musics sounds/metal-whoosh-hit-4-201906.mp3"
+dest_files=["res://.godot/imported/metal-whoosh-hit-4-201906.mp3-69a72f6454df5ab1eec76fef980138a5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

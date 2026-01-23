@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bigky5dol3uju"]
+
+[ext_resource type="Script" uid="uid://dyulqi7kjo4mi" path="res://throw/bullet.gd" id="1_t5fm8"]
+[ext_resource type="Texture2D" uid="uid://drw5wl07n0wni" path="res://throw/shuriken.png" id="2_t5fm8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t5fm8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_t5fm8")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rkiml"]
+radius = 3.0
+
+[node name="bullet" type="Area2D" groups=["bullet"]]
+script = ExtResource("1_t5fm8")
+
+[node name="anim" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_t5fm8")
+frame_progress = 1.0
+
+[node name="collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rkiml")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+rect = Rect2(-3, -3, 6, 6)
